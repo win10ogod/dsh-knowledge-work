@@ -89,3 +89,13 @@ test('named claims support creation and partial updates without dropping their e
  assert.equal(task.claims.length,1);assert.equal(task.claims[0].statement,before.statement);assert.deepEqual(task.claims[0].evidence,before.evidence);assert.deepEqual(task.claims[0].requirementIds,['r1'])
  assert.throws(()=>store.claim(actor,{taskId:task.id,id:'new-without-content'}),/statement/)
 })
+
+test('identical content updates do not manufacture progress or invalidate a completed review',t=>{
+ const {store}=fixture(t);let task=finishWork(store,start(store));task=store.review(actor,{taskId:task.id,note:'Checked the current evidence.'})
+ const revision=task.revision,contentRevision=task.contentRevision,review=task.review
+ for(let i=0;i<4;i++){
+  task=store.claim(actor,{taskId:task.id,id:task.claims[0].id,statement:task.claims[0].statement,expectedRevision:revision})
+  assert.equal(task.changed,false);assert.equal(task.revision,revision);assert.equal(task.contentRevision,contentRevision);assert.deepEqual(task.review,review)
+ }
+ assert.equal(store.deliver(actor,{taskId:task.id}).task.status,'completed')
+})

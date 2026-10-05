@@ -1,6 +1,6 @@
 # DSH 知識工作
 
-為 DSH 0.2.0-rc.2 提供「知識工作」Agent 預設與持久工作流程。適用於研究整理、方案比較及知識維護，將問題、步驟、實際讀取的來源、論點、核查與報告放在同一個工作案中。
+為 DSH 0.2.0-rc.2 與 0.2.1-alpha.1 提供「知識工作」Agent 預設與持久工作流程。適用於研究整理、方案比較及知識維護，將問題、步驟、實際讀取的來源、論點、核查與報告放在同一個工作案中。
 
 ## 使用
 
@@ -52,7 +52,7 @@
 使用 GitHub Release 的 `.tgz`：
 
 ```sh
-dsh plugin --profile YOUR_PROFILE add ./dsh-knowledge-work-0.1.0.tgz
+dsh plugin --profile YOUR_PROFILE add ./dsh-knowledge-work-0.1.1.tgz
 ```
 
 使用兩個原生插件條目：`knowledge-work` 提供儲存與工作台，`preset-knowledge-work` 註冊 Agent 預設。

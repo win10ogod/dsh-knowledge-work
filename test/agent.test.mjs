@@ -11,6 +11,7 @@ import Sessions from '@deepseek-ai/dsh-session'
 import Projections from '@deepseek-ai/dsh-session-projection'
 import Prompt from '@deepseek-ai/dsh-system-prompt'
 import Tools from '@deepseek-ai/dsh-tools'
+import * as NativeToolExecutor from '@deepseek-ai/dsh-tool-executor-native'
 import Loop from '@deepseek-ai/dsh-agent-loop'
 import {KnowledgeStore} from '../lib/store.js'
 import * as knowledge from '../lib/agent.js'
@@ -19,7 +20,7 @@ const call=(name,args,id)=>({type:'tool-call',id:ToolCallId(id),name,arguments:J
 function returned(request,id){const message=request.messages.findLast(m=>m.role==='tool'&&m.toolCallId===id);assert.ok(message,'Missing result '+id);assert.notEqual(message.isError,true,message.content[0]?.text);return JSON.parse(message.content.filter(b=>b.type==='text').map(b=>b.text).join(''))}
 async function fixture(t,script,{autoContinue=true,expectedError=false}={}){
  const directory=mkdtempSync(join(tmpdir(),'knowledge-agent-')),store=new KnowledgeStore(join(directory,'work.sqlite'));store.autoContinue=autoContinue
- const ctx=new Context();for(const plugin of [Sessions,Projections,Agents,Llm,Prompt,Tools])await ctx.plugin(plugin)
+ const ctx=new Context();for(const plugin of [Sessions,Projections,Agents,Llm,Prompt,Tools,NativeToolExecutor])await ctx.plugin(plugin)
  await ctx.plugin(Loop,{});ctx.provide('knowledgeWork',store);await ctx.plugin(knowledge)
  const requests=[],events=[];ctx.on('session/event',(_session,e)=>events.push(e))
  let handle
